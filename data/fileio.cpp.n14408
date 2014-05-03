@@ -1,0 +1,106 @@
+/**************************************************************************************************
+**
+** @2013-2014, Xi'an DATA Technology for Electronic Information Inc.
+**
+** Module: ALP Application
+** File: fileio.cpp
+** Description: FileIO.
+**
+** Created By: wangshuo, wangshuo@xdt-inc.com
+** Created Date: 2013-10-12T20:42:35
+**
+***************************************************************************************************/
+
+#include "fileio.h"
+using namespace ALP;
+
+/**
+ * @brief Read data to memory
+ */
+void FileIO::read()
+{
+
+}
+
+/**
+ * @brief Get curve list
+ * @return Curve list
+ */
+void *FileIO::curveList()
+{
+}
+
+/**
+ * @brief Get curve data by name
+ * @param curveName Curve name
+ * @return Curve data
+ */
+void *FileIO::curve(QString curveName)
+{
+}
+
+/**
+ * @brief Get curve meta by name
+ * @param curveName Curve name
+ * @return Curve meta
+ */
+const void *FileIO::curveMeta(QString curveName)
+{
+
+}
+
+/**
+ * @brief Get object list
+ * @param type Object type, such as curve, table, etc.
+ * @return Point to the list
+ */
+void *FileIO::list(int type)
+{
+
+}
+
+/**
+ * @brief Get metadata of the specific object by name
+ * @param name Object name
+ * @param type Object type, such as curve, table, etc.
+ * @return Point to the metadata
+ */
+void *FileIO::meta(QString name, int type)
+{
+
+}
+
+/**
+ * @brief Get data of the specific object by name
+ * @param name Object name
+ * @param type Object type, such as curve, table, etc.
+ * @return Point to the data
+ */
+void *FileIO::data(QString name, int type)
+{
+
+}
+
+bool FileIO::isRead() const
+{
+    return m_isRead;
+}
+
+void FileIO::setRead(bool isRead)
+{
+    m_isRead = isRead;
+}
+
+QString FileIO::fileAbsoluteName() const
+{
+    return m_fileAbsoluteName;
+}
+
+void FileIO::setFileAbsoluteName(const QString &fileAbsoluteName)
+{
+    m_fileAbsoluteName = fileAbsoluteName;
+}
+
+
+
+
