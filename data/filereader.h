@@ -56,15 +56,6 @@ public:
     FileReader();
     ~FileReader();
 
-    enum FileType {
-        ALPFile,
-        WISFile,
-        AXPFile,
-
-        // always the last one
-        NoneFile
-    };
-
     bool open(const QString &fileName);
     QVector<DataListItem> list(int type = 0);
     MetaData *meta(int seq);
@@ -81,6 +72,10 @@ public:
     QList<QPair<float, QList<float> > > waveData(int seq);
     QList<QPair<float, QList<float> > > waveData(const QString &name);
 
+    FileIO *fileIO() const;
+    void setFileIO(FileIO *fileIO);
+
+    int fileType(const QString &fileName);
 
 private:
     FileIO *m_fileIO;
@@ -91,7 +86,7 @@ private:
     QMap<int, Data<float,float,float> *> m_multiDimensionData;
 
 private:
-    int fileType(const QString &fileName);
+
     int objectSequence(const QString &name);
     int objectType(int attribute, int subattribute);
 

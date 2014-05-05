@@ -304,10 +304,22 @@ public:
     virtual QList<ALP_OBJECT_ENTRY *> *list(int type = 0);
 
     //write file
+    virtual bool writeChannelData();
+    virtual bool writeTableData();
+    virtual bool writeStreamData();
+
     bool createNewAlpFile(const QString &fileName);
     bool writeChannel(ALP_OBJECT_ENTRY *entry ,ALP_CHANNEL *channel, Data<float,float,float> *data);
     bool writeTable(ALP_OBJECT_ENTRY *entry, QList<ALP_TABLE_FIELD *> listTableField, QList<QPair<int, QList<void *> > > recoders);
     bool writeStream(ALP_OBJECT_ENTRY *entry, const char *buf);
+    bool updateName(int seq, QString name);
+
+    static ALP_OBJECT_ENTRY *entry(QString name, FileIO::ObjectAttribute attr, FileIO::ObjectType subattr);
+    static ALP_CHANNEL *channel(QString unit, QString aName, QString aUnit, QList<ALP_CHANNEL_DIMENSION> dim);
+    static ALP_CHANNEL_DIMENSION *channelDim(QString name, QString unit, QString aName,float delta, int MaxSample);
+    static ALP_STREAM *stream();
+    static ALP_TABLE *table();
+    static ALP_TABLE_FIELD *tableField();
 
 private:
     virtual bool initialization();

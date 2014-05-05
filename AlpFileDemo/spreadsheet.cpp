@@ -70,7 +70,7 @@ void Sheet::createSample()
 //        ++temp;
 //    }
 //    qDebug()<<alp->writeStream(entry,ba.data());
-
+    qDebug()<<"::"<<sizeof(ALP_HEAD)<<" " <<sizeof(ALP_OBJECT_ENTRY);
     ALP_OBJECT_ENTRY *entry2 = new ALP_OBJECT_ENTRY;
     strcpy(entry2->Name,"Ten");
     entry2->Status = FileIO::normal;
@@ -90,7 +90,7 @@ void Sheet::createSample()
     strcpy(channel->DimInfo[0].Unit, "m");
     strcpy(channel->DimInfo[0].AliasName,"D");
     channel->DimInfo[0].StartVal = 1000;
-    channel->DimInfo[0].Delta = 1;
+    channel->DimInfo[0].Delta = 2;
     channel->DimInfo[0].Samples = 500;
     channel->DimInfo[0].MaxSamples = 1000;
     channel->DimInfo[0].Size = 4;
@@ -100,11 +100,11 @@ void Sheet::createSample()
     QMap<float,QList<QPair<float,float>*>*> dd = data->data;
     for (int p = 0; p < channel->DimInfo[0].Samples; p++) {
         QList<QPair< float, float> *> *list = new QList<QPair< float, float> *>();
-        QPair<float, float> pair;
-        pair.first = -1;
-        pair.second = 2;
-        list->append(&pair);
-        data->data.insert(p + channel->DimInfo[0].StartVal, list);
+        QPair<float, float> *pair = new QPair<float, float>();
+        pair->first = -1;
+        pair->second = qrand();
+        list->append(pair);
+        data->data.insert(p *channel->DimInfo[0].Delta + channel->DimInfo[0].StartVal, list);
     }
     qDebug()<<alp->writeChannel(entry2,channel,data);
 
@@ -150,7 +150,7 @@ void Sheet::createSample()
         for (int j = 0; j < channel3->DimInfo[1].Samples; j ++){
             QPair<float, float> *pair = new QPair<float, float>;
             pair->first = j * channel3->DimInfo[1].Delta + channel3->DimInfo[1].StartVal;
-            pair->second = 2;
+            pair->second = j;
             list->append(pair);
         }
         data3->data.insert(p * channel3->DimInfo[0].Delta + channel3->DimInfo[0].StartVal, list);

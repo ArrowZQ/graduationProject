@@ -30,6 +30,7 @@ SOURCES += \
     alpio.cpp \
     fileshare.cpp \
     filereader.cpp\
+    filewrite.cpp
 
 HEADERS +=\
     data_global.h \
@@ -37,7 +38,8 @@ HEADERS +=\
     fileio.h \
     alpio.h \
     fileshare.h \
-    filereader.h
+    filereader.h \
+    filewrite.h
 
 unix:!symbian {
     maemo5 {

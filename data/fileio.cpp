@@ -76,6 +76,11 @@ int FileIO::type(int seq)
 
 }
 
+void FileIO::openFile(const QString &fileName)
+{
+
+}
+
 /**
  * @brief Get object meta by seq
  * @param seq Sequence number of the object in data files
@@ -92,6 +97,26 @@ MetaData *FileIO::meta(int seq)
  * @return
  */
 void *FileIO::data(int seq)
+{
+
+}
+
+bool FileIO::updateName(int seq, QString name)
+{
+
+}
+
+bool FileIO::writeChannelData()
+{
+
+}
+
+bool FileIO::writeTableData()
+{
+
+}
+
+bool FileIO::writeStreamData()
 {
 
 }

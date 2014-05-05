@@ -56,7 +56,7 @@ bool FileReader::open(const QString &fileName)
 
     if (!m_fileIO) {
         switch (m_fileType) {
-        case ALPFile:
+        case FileIO::ALPFile:
         {
             AlpIO *alp = new AlpIO();
             alp->openFile(fileName);
@@ -64,9 +64,7 @@ bool FileReader::open(const QString &fileName)
             m_isOpen = m_fileIO->isOpen();
             break;
         }
-        case WISFile:
-            break;
-        case AXPFile:
+        case FileIO::AXPFile:
             break;
         default:
             return false;
@@ -99,7 +97,7 @@ QVector<DataListItem> FileReader::list(int type)
     }
 
     // Object Type
-    if (m_fileType == FileReader::ALPFile) {
+    if (m_fileType == FileIO::ALPFile) {
         QList<ALP_OBJECT_ENTRY *> *list = static_cast<QList<ALP_OBJECT_ENTRY *> *>(m_fileIO->list(type));
         if (!list) {
             return vector;
@@ -205,7 +203,7 @@ QPolygonF FileReader::curveData(int seq)
     }
 
     // Object Type
-    if (m_fileType == FileReader::ALPFile) {
+    if (m_fileType == FileIO::ALPFile) {
         Data<float,float,float> *d = static_cast<Data<float,float,float>*>(m_fileIO->data(seq));
 
         if (!d) {
@@ -262,7 +260,7 @@ QPolygonF FileReader::arrayData(int seq, int &count, int index)
 
     if (!d) {
         // Object Type
-        if (m_fileType == FileReader::WISFile) {
+        if (m_fileType == FileIO::ALPFile) {
             d = static_cast<Data<float,float,float>*>(m_fileIO->data(seq));
 
             if (!d) {
@@ -330,7 +328,7 @@ QList<QPair<float, QList<float> > > FileReader::waveData(int seq)
     }
 
     // Object Type
-    if (m_fileType == FileReader::WISFile) {
+    if (m_fileType == FileIO::ALPFile) {
         Data<float,float,float> *d = static_cast<Data<float,float,float>*>(m_fileIO->data(seq));
 
         if (!d) {
@@ -353,6 +351,16 @@ QList<QPair<float, QList<float> > > FileReader::waveData(const QString &name)
 {
     return waveData(objectSequence(name));
 }
+FileIO *FileReader::fileIO() const
+{
+    return m_fileIO;
+}
+
+void FileReader::setFileIO(FileIO *fileIO)
+{
+    m_fileIO = fileIO;
+}
+
 
 //======================================= Section: Private Methods =============================================
 /**
@@ -365,17 +373,14 @@ int FileReader::fileType(const QString &fileName)
     QFileInfo fileInfo(fileName);
     QString surfix = "." + fileInfo.suffix().toLower();
 
-    if (surfix == ".wis") {
-        return FileReader::WISFile;
-    }
-    else if (surfix == ".axp") {
-        return FileReader::AXPFile;
+    if (surfix == ".axp") {
+        return FileIO::AXPFile;
     }
     else if (surfix == ".alp") {
-        return FileReader::ALPFile;
+        return FileIO::ALPFile;
     }
     else {
-        return FileReader::NoneFile;
+        return FileIO::NoneFile;
     }
 }
 

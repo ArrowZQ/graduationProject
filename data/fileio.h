@@ -184,15 +184,31 @@ public:
         del                 =2
     };
 
+    enum FileType {
+        ALPFile   =1,
+        AXPFile   =2,
+
+        // always the last one
+        NoneFile  =99
+    };
+
 public:
     FileIO();
     ~FileIO();
 
     virtual bool initialization();
     virtual void *list(int type = 0);
-    virtual int type(int seq);
+    virtual int type(int seq) = 0;
+    virtual void openFile(const QString &fileName) = 0;
     virtual MetaData *meta(int seq);
     virtual void *data(int seq);
+
+    virtual bool updateName(int seq, QString name);
+    virtual bool writeChannelData();
+    virtual bool writeTableData();
+    virtual bool writeStreamData();
+
+
     QVector<float> *depths(float start, float interval, int number);
 
     bool isRead() const;

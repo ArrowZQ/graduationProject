@@ -169,6 +169,21 @@ QList<ALP_OBJECT_ENTRY *> *AlpIO::list(int type)
     }
 }
 
+bool AlpIO::writeChannelData()
+{
+
+}
+
+bool AlpIO::writeTableData()
+{
+
+}
+
+bool AlpIO::writeStreamData()
+{
+
+}
+
 int AlpIO::type(int seq)
 {
     // Always use data after opening and initialization
@@ -767,6 +782,26 @@ bool AlpIO::writeStream(ALP_OBJECT_ENTRY *entry, const char *buf)
     updateHead();
 
     return true;
+}
+
+bool AlpIO::updateName(int seq, QString name)
+{
+
+}
+
+ALP_OBJECT_ENTRY *AlpIO::entry(QString name, FileIO::ObjectAttribute attr, FileIO::ObjectType subattr)
+{
+
+}
+
+ALP_CHANNEL *AlpIO::channel(QString unit, QString aName, QString aUnit, QList<ALP_CHANNEL_DIMENSION> dim)
+{
+
+}
+
+ALP_CHANNEL_DIMENSION *AlpIO::channelDim(QString name, QString unit, QString aName, float delta, int MaxSample)
+{
+
 }
 
 //======================================= Section: Private methods ===========================================
