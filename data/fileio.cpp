@@ -106,20 +106,21 @@ bool FileIO::updateName(int seq, QString name)
 
 }
 
-bool FileIO::writeChannelData()
+bool FileIO::writeChannelData(ALP_OBJECT_ENTRY *entry, ALP_CHANNEL *channel, Data<float, float, float> *data)
 {
 
 }
 
-bool FileIO::writeTableData()
+bool FileIO::writeTableData(ALP_OBJECT_ENTRY *entry, QList<ALP_TABLE_FIELD *> listTableField, QList<QPair<int, QList<void *> > > recoders)
 {
 
 }
 
-bool FileIO::writeStreamData()
+bool FileIO::writeStreamData(ALP_OBJECT_ENTRY *entry, const char *buf)
 {
 
 }
+
 
 /**
  * @brief Get object depths related to object data
@@ -220,17 +221,17 @@ void FileIO::setOpen(bool isOpen)
  */
 int FileIO::objectType(int attribute, int subattribute)
 {
-    if (attribute == ChannelAttribure) {
-        if (subattribute >= CurveObject && subattribute <= NoneObject) {
+    if (attribute == AlpData::ChannelAttribure) {
+        if (subattribute >= AlpData::CurveObject && subattribute <= AlpData::NoneObject) {
             return subattribute;
         }
     }
-    else if (attribute == TableAttribure) {
-        return TableObject;
+    else if (attribute == AlpData::TableAttribure) {
+        return AlpData::TableObject;
     }
-    else if (attribute == StreamAttribure) {
-        return StreamObject;
+    else if (attribute == AlpData::StreamAttribure) {
+        return AlpData::StreamObject;
     }
 
-    return NoneObject;
+    return AlpData::NoneObject;
 }

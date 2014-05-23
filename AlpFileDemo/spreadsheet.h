@@ -9,8 +9,10 @@
 #include <QFileDialog>
 #include <QObject>
 #include <QPolygonF>
+#include <QInputDialog>
 
 #include "filereader.h"
+#include "filewrite.h"
 
 using namespace ALP;
 
@@ -24,10 +26,13 @@ public:
     QListWidget *listEntry() const;
     void setListEntry(QListWidget *listEntry);
 
+    void test();
+
 public slots:
     void openfile();
     void createSample();
-    void doubleClicked(QListWidgetItem * item);
+    void doubleClicked(QListWidgetItem* item);
+    void rightClicked(QListWidgetItem* item);
 
 
 private:

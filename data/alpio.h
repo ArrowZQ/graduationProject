@@ -17,6 +17,7 @@
 #define ALPIO_H
 
 #include "fileio.h"
+#include "alpdata.h"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -51,101 +52,6 @@ namespace ALP{
 
 #define ROW 655350
 #define COL 512
-
-//======================================= Section: ALP File Data Structure - start ===========================================
-/**
- * ALP Head
- */
-typedef struct tagALP_HEAD
-{
-    short   MachineType;                   //机器类型：0-PC,1-SUN,2-IBM,3-HP -1-初始化默认
-    short   MaxObjectNumber;               //允许记录的最大对象数，默认为512，可在文件产生时给出
-    short   ObjectNumber;                  //当前记录中对象的数目(包括删除和抛弃的对象)
-//    short   BlockLen;                      //块的长度（字节数）
-    int     EntryOffsetFirst;              //第一个对象入口记录从文件开始的偏移量
-//    int     EntryOffsetLast;               //最后一个对象入口记录从文件开始的偏移量
-    int     FileSize;                      //文件的字节数
-    int      TimeCreate;                   //文件产生的时间
-    char   Reserved[32];                   //保留字节
-}ALP_HEAD;
-
-/**
- * ALP Object meta
- */
-typedef struct tagALP_OBJECT_ENTRY
-{
-    char   Name[16];                      //对象名
-    int    Status;                        //对象状态:0-正常,1:抛弃,2:删除
-    short  Attribute;                     //对象主属性:1-通道对象,2-表对象,3-流对象
-    short  SubAttribute;                  //对象子属性
-    int  Position;                        //对象数据体从文件开始处的偏移量
-//    int  BlockNum;                        //对象数据体占用磁盘的块数
-    int  nextEntryPos;                    //下一个对象如果记录从文件开始处的偏移量
-    int  dataLen;                         //对象数据体的长度
-    int  TimeCreate;                      //对象产生的时间
-    int  TimeWrite;                       //对象最近修改的时间
-    char   Reserved[32];                  //保留字节
-}ALP_OBJECT_ENTRY;                        //对象入口结构
-
-/**
- * ALP Dimension meta
- */
-typedef struct tagALP_CHANNEL_DIMENSION
-{
-    char   Name[8];                       //维名称
-    char   Unit[8];                       //维单位
-    char   AliasName[16];                 //维别名
-    float  StartVal;                      //维的开始值
-    float  Delta;                         //维的采集或计算增量
-    int  Samples;                       //维的数据采样点数
-    int  MaxSamples;                    //维的数据采样的最大点数
-    int  Size;                          //该维上每一采样点所占用的字节数
-    short   RepCode;                       //维的数据类型
-    short   Reserved;                      //保留字节
-}ALP_CHANNEL_DIMENSION;                   //通道维信息结构
-
-/**
- * ALP Channel meta
- */
-typedef struct tagALP_CHANNEL
-{
-    char   Unit[8];                       //对象单位
-    char   AliasName[16];                 //对象别名
-    char   AliasUnit[16];                 //单位别名
-    short   RepCode;                       //对象数据类型
-    short   CodeLen;                       //数据类型长度
-    float  MinVal;                        //对象最小值:缺省左刻度值
-    float  MaxVal;                        //对象最大值：缺省右刻度值
-    short   Reserved;                      //保留字节
-    short   NumOfDimension;                //对象维信息数
-    ALP_CHANNEL_DIMENSION DimInfo[4];     //对象维信息
-}ALP_CHANNEL;                             //通道信息结构
-
-//------------------------------ REGION: MetaData ------------------------------
-/**
- * Stream object meta
- */
-typedef struct tagALP_STREAM
-{
-    int  Length;                  //对象长度
-}ALP_STREAM;                              //流对象结构
-
-/**
- * Table object meta
- */
-typedef struct tagALP_TABLE_FIELD
-{
-    char   Name[32];                      //字段名称
-    short   RepCode;                       //字段值的浮点类型
-    short   Length;                        //字段值的长度
-    int  Reserved;                      //保留字节
-}ALP_TABLE_FIELD;                         //字段信息结构
-
-typedef struct tagALP_TABLE
-{
-    int  RecordCount;                   //表的记录数
-    int  FieldCount;                    //表的字段数
-}ALP_TABLE;                               //表信息结构
 
 /**
  * Curve object meta
@@ -243,19 +149,7 @@ typedef struct tagALP_TDT_DATA
     float Value;                          //采样值
 }ALP_TDT_DATA;
 
-/**
- * @brief The Table class
- *
- * One record in table
- *
- */
-class DATASHARED_EXPORT Table : public QObject
-{
-    Q_OBJECT
 
-public:
-    explicit Table(QObject *parent = 0);
-};
 
 
 ////old
@@ -304,22 +198,12 @@ public:
     virtual QList<ALP_OBJECT_ENTRY *> *list(int type = 0);
 
     //write file
-    virtual bool writeChannelData();
-    virtual bool writeTableData();
-    virtual bool writeStreamData();
-
     bool createNewAlpFile(const QString &fileName);
-    bool writeChannel(ALP_OBJECT_ENTRY *entry ,ALP_CHANNEL *channel, Data<float,float,float> *data);
-    bool writeTable(ALP_OBJECT_ENTRY *entry, QList<ALP_TABLE_FIELD *> listTableField, QList<QPair<int, QList<void *> > > recoders);
-    bool writeStream(ALP_OBJECT_ENTRY *entry, const char *buf);
-    bool updateName(int seq, QString name);
+    virtual bool writeChannelData(ALP_OBJECT_ENTRY *entry ,ALP_CHANNEL *channel, Data<float,float,float> *data);
+    virtual bool writeTableData(ALP_OBJECT_ENTRY *entry, QList<ALP_TABLE_FIELD *> listTableField, QList<QPair<int, QList<void *> > > recoders);
+    virtual bool writeStreamData(ALP_OBJECT_ENTRY *entry, const char *buf);
+    virtual bool updateName(int seq, QString name);
 
-    static ALP_OBJECT_ENTRY *entry(QString name, FileIO::ObjectAttribute attr, FileIO::ObjectType subattr);
-    static ALP_CHANNEL *channel(QString unit, QString aName, QString aUnit, QList<ALP_CHANNEL_DIMENSION> dim);
-    static ALP_CHANNEL_DIMENSION *channelDim(QString name, QString unit, QString aName,float delta, int MaxSample);
-    static ALP_STREAM *stream();
-    static ALP_TABLE *table();
-    static ALP_TABLE_FIELD *tableField();
 
 private:
     virtual bool initialization();

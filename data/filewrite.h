@@ -3,18 +3,20 @@
 
 #include "fileshare.h"
 #include "alpio.h"
+#include "fileshare.h"
 #include <QDebug>
 #include <QFile>
+#include <QFileInfo>
 
 using namespace ALP;
 class FileWrite
 {
 public:
-    FileWrite() {}
+    FileWrite();
 
     bool open(const QString &fileName);
 
-    bool writeChannelData(void);
+    bool writeChannelData(ALP_OBJECT_ENTRY *entry, ALP_CHANNEL *channel, Data<float,float,float> *data);
     bool writeTableData(void);
     bool writeStreamData(void);
     bool updateName(int seq, QString name);
@@ -28,6 +30,7 @@ public:
     void setFileIO(FileIO *fileIO);
 
     int fileType(const QString &fileName);
+    QString createNewFile(QString fileName, QString path, FileIO::FileType type);
 private:
     FileIO *m_fileIO;
     QString m_fileName;

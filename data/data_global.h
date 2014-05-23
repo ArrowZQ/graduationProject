@@ -22,4 +22,7 @@
 #  define DATASHARED_EXPORT Q_DECL_IMPORT
 #endif
 
+
+
+
 #endif // DATA_GLOBAL_H

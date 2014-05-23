@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(openfile, SIGNAL(clicked()), sheet, SLOT(openfile()));
     connect(createSample, SIGNAL(clicked()), sheet, SLOT(createSample()));
     connect(listWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), sheet, SLOT(doubleClicked(QListWidgetItem*)));
+    connect(listWidget, SIGNAL(itemClicked(QListWidgetItem*)), sheet, SLOT(rightClicked(QListWidgetItem*)));
 
     hlayoutBut->addWidget(openfile,0,Qt::AlignLeft);
     hlayoutBut->addWidget(createSample,1,Qt::AlignLeft);
