@@ -31,15 +31,15 @@ AlpIO::AlpIO() :
 //    m_isInit = false;
 
 //    // new
-//    m_head = new ALP_HEAD;
-//    m_curveList = new QList<ALP_OBJECT_ENTRY*>();
-//    m_waveList = new QList<ALP_OBJECT_ENTRY*>();
-//    m_fmtList = new QList<ALP_OBJECT_ENTRY*>();
-//    m_tdtList = new QList<ALP_OBJECT_ENTRY*>();
-//    m_tableList = new QList<ALP_OBJECT_ENTRY*>();
-//    m_streamList = new QList<ALP_OBJECT_ENTRY*>();
-//    m_allList = new QList<ALP_OBJECT_ENTRY*>();
-//    m_alpTableField = new QList<ALP_TABLE_FIELD*>();
+    m_head = new ALP_HEAD;
+    m_curveList = new QList<ALP_OBJECT_ENTRY*>();
+    m_waveList = new QList<ALP_OBJECT_ENTRY*>();
+    m_fmtList = new QList<ALP_OBJECT_ENTRY*>();
+    m_tdtList = new QList<ALP_OBJECT_ENTRY*>();
+    m_tableList = new QList<ALP_OBJECT_ENTRY*>();
+    m_streamList = new QList<ALP_OBJECT_ENTRY*>();
+    m_allList = new QList<ALP_OBJECT_ENTRY*>();
+    m_alpTableField = new QList<ALP_TABLE_FIELD*>();
 
 //    // Open file
 //    std::string file = std::string((const char *)fileName.toLocal8Bit());
@@ -72,15 +72,15 @@ void AlpIO::openFile(const QString &fileName)
     m_isInit = false;
 
     // new
-    m_head = new ALP_HEAD;
-    m_curveList = new QList<ALP_OBJECT_ENTRY*>();
-    m_waveList = new QList<ALP_OBJECT_ENTRY*>();
-    m_fmtList = new QList<ALP_OBJECT_ENTRY*>();
-    m_tdtList = new QList<ALP_OBJECT_ENTRY*>();
-    m_tableList = new QList<ALP_OBJECT_ENTRY*>();
-    m_streamList = new QList<ALP_OBJECT_ENTRY*>();
-    m_allList = new QList<ALP_OBJECT_ENTRY*>();
-    m_alpTableField = new QList<ALP_TABLE_FIELD*>();
+//    m_head = new ALP_HEAD;
+//    m_curveList = new QList<ALP_OBJECT_ENTRY*>();
+//    m_waveList = new QList<ALP_OBJECT_ENTRY*>();
+//    m_fmtList = new QList<ALP_OBJECT_ENTRY*>();
+//    m_tdtList = new QList<ALP_OBJECT_ENTRY*>();
+//    m_tableList = new QList<ALP_OBJECT_ENTRY*>();
+//    m_streamList = new QList<ALP_OBJECT_ENTRY*>();
+//    m_allList = new QList<ALP_OBJECT_ENTRY*>();
+//    m_alpTableField = new QList<ALP_TABLE_FIELD*>();
 
 }
 
@@ -111,21 +111,21 @@ bool AlpIO::initialization()
         {
             break;
         }
-        else if(objectEntry->Attribute == ChannelAttribure)
+        else if(objectEntry->Attribute == AlpData::ChannelAttribure)
         {
-            if(objectEntry->SubAttribute == CurveObject)
+            if(objectEntry->SubAttribute == AlpData::CurveObject)
                 m_curveList->append(objectEntry);
-            else if(objectEntry->SubAttribute == WaveObject)
+            else if(objectEntry->SubAttribute == AlpData::WaveObject)
                 m_waveList->append(objectEntry);
-            else if(objectEntry->SubAttribute == FMTObject)
+            else if(objectEntry->SubAttribute == AlpData::FMTObject)
                 m_fmtList->append(objectEntry);
-            else if(objectEntry->SubAttribute == TDTObject)
+            else if(objectEntry->SubAttribute == AlpData::TDTObject)
                 m_tdtList->append(objectEntry);
         }
-        else if(objectEntry->Attribute == TableAttribure) {
+        else if(objectEntry->Attribute == AlpData::TableAttribure) {
             m_tableList->append(objectEntry);
         }
-        else if(objectEntry->Attribute == StreamAttribure) {
+        else if(objectEntry->Attribute == AlpData::StreamAttribure) {
             m_streamList->append(objectEntry);
         }
 
@@ -150,45 +150,30 @@ QList<ALP_OBJECT_ENTRY *> *AlpIO::list(int type)
     }
 
     switch (type) {
-    case AllObject:
+    case AlpData::AllObject:
         return m_allList;
-    case CurveObject:
+    case AlpData::CurveObject:
         return m_curveList;
-    case WaveObject:
+    case AlpData::WaveObject:
         return m_waveList;
-    case FMTObject:
+    case AlpData::FMTObject:
         return m_fmtList;
-    case TDTObject:
+    case AlpData::TDTObject:
         return m_tdtList;
-    case TableObject:
+    case AlpData::TableObject:
         return m_tableList;
-    case StreamObject:
+    case AlpData::StreamObject:
         return m_streamList;
     default:
         return NULL;
     }
 }
 
-bool AlpIO::writeChannelData()
-{
-
-}
-
-bool AlpIO::writeTableData()
-{
-
-}
-
-bool AlpIO::writeStreamData()
-{
-
-}
-
 int AlpIO::type(int seq)
 {
     // Always use data after opening and initialization
     if (!isInit() && !initialization()) {
-        return NoneObject;
+        return AlpData::NoneObject;
     }
 
     // Locate the object
@@ -200,7 +185,7 @@ int AlpIO::type(int seq)
         }
     }
 
-    return NoneObject;
+    return AlpData::NoneObject;
 }
 
 
@@ -227,7 +212,7 @@ MetaData *AlpIO::meta(int seq)
 
             // Locate the object
             switch (type) {
-            case CurveObject: {
+            case AlpData::CurveObject: {
                 ALP_CURVE *d = static_cast<ALP_CURVE *>(curvesMeta(entry));
 
                 if (d) {
@@ -247,7 +232,7 @@ MetaData *AlpIO::meta(int seq)
                 }
                 break;
             }
-            case WaveObject: {
+            case AlpData::WaveObject: {
                 ALP_WAVE *d = static_cast<ALP_WAVE *>(waveMeta(entry));
 
                 if (d) {
@@ -272,7 +257,7 @@ MetaData *AlpIO::meta(int seq)
                 }
                 break;
             }
-            case FMTObject: {
+            case AlpData::FMTObject: {
                 ALP_FMT *d = static_cast<ALP_FMT *>(fmtMeta(entry));
 
                 if (d) {
@@ -293,7 +278,7 @@ MetaData *AlpIO::meta(int seq)
                 }
                 break;
             }
-            case TDTObject: {
+            case AlpData::TDTObject: {
                 ALP_TDT *d = static_cast<ALP_TDT *>(tdtMeta(entry));
 
                 if (d) {
@@ -313,7 +298,7 @@ MetaData *AlpIO::meta(int seq)
                 }
                 break;
             }
-            case TableObject: {
+            case AlpData::TableObject: {
                 ALP_TABLE *d = static_cast<ALP_TABLE *>(tableMeta(entry));
 
                 if (d) {
@@ -322,8 +307,8 @@ MetaData *AlpIO::meta(int seq)
                 }
                 break;
             }
-            case StreamObject: {
-                ALP_STREAM *d = static_cast<ALP_STREAM *>(streamData(entry));
+            case AlpData::StreamObject: {
+                ALP_STREAM *d = static_cast<ALP_STREAM *>(streamMeta(entry));
 
                 if (d) {
                     meta->setProperty("objectLength", d->Length);
@@ -363,17 +348,17 @@ void *AlpIO::data(int seq)
             int type = objectType(entry->Attribute, entry->SubAttribute);
 
             switch (type) {
-            case CurveObject:
+            case AlpData::CurveObject:
                 return curveData(entry);
-            case WaveObject:
+            case AlpData::WaveObject:
                 return waveData(entry);
-            case FMTObject:
+            case AlpData::FMTObject:
                 return fmtData(entry);
-            case TDTObject:
+            case AlpData::TDTObject:
                 return tdtData(entry);
-            case TableObject:
+            case AlpData::TableObject:
                 return tableData(entry);
-            case StreamObject:
+            case AlpData::StreamObject:
                 return streamData(entry);
             default:
                 return NULL;
@@ -403,15 +388,16 @@ bool AlpIO::createNewAlpFile(const QString &fileName)
         head->FileSize = sizeof(ALP_HEAD) + 10;
         head->TimeCreate = QDate::currentDate().toJulianDay();
         m_fileWriteStream.write((char *)head, sizeof(ALP_HEAD));
-
+        qDebug()<<m_fileWriteStream.tellp();
         m_fileWriteStream.close();
+
         return true;
     } else {
         return false;
     }
 }
 
-bool AlpIO::writeChannel(ALP_OBJECT_ENTRY *entry, ALP_CHANNEL *channel, Data<float,float,float> *data)
+bool AlpIO::writeChannelData(ALP_OBJECT_ENTRY *entry, ALP_CHANNEL *channel, Data<float,float,float> *data)
 {
     // Always use data after opening and initialization
     if (!isInit() && !initialization()) {
@@ -429,7 +415,7 @@ bool AlpIO::writeChannel(ALP_OBJECT_ENTRY *entry, ALP_CHANNEL *channel, Data<flo
     entry->TimeWrite = QDate::currentDate().toJulianDay();
 
     QMap<float,QList<QPair<float,float>*>*> dataReal = data->data;
-    if (entry->SubAttribute == CurveObject) {
+    if (entry->SubAttribute == AlpData::CurveObject) {
         if (channel->DimInfo[0].Delta == 0) {
             //写入对象入口和通道对象
             int datalen = dataReal.size() * sizeof(float) * 2 + sizeof(ALP_CHANNEL);
@@ -461,7 +447,7 @@ bool AlpIO::writeChannel(ALP_OBJECT_ENTRY *entry, ALP_CHANNEL *channel, Data<flo
         m_head->FileSize = entry->nextEntryPos;
         updateHead();
         return true;
-    } else if (entry->SubAttribute == WaveObject) {
+    } else if (entry->SubAttribute == AlpData::WaveObject) {
         if (channel->DimInfo[0].Delta == 0) {
             if (channel->DimInfo[1].Delta == 0) {
                 if (channel->DimInfo[1].Samples == 0) {
@@ -661,9 +647,9 @@ bool AlpIO::writeChannel(ALP_OBJECT_ENTRY *entry, ALP_CHANNEL *channel, Data<flo
         updateHead();
 
         return true;
-    } else if (entry->SubAttribute == FMTObject) {
+    } else if (entry->SubAttribute == AlpData::FMTObject) {
         return false;
-    } else if (entry->SubAttribute == TDTObject) {
+    } else if (entry->SubAttribute == AlpData::TDTObject) {
         return false;
     } else {
         return false;
@@ -671,7 +657,7 @@ bool AlpIO::writeChannel(ALP_OBJECT_ENTRY *entry, ALP_CHANNEL *channel, Data<flo
 
 }
 
-bool AlpIO::writeTable(ALP_OBJECT_ENTRY *entry, QList<ALP_TABLE_FIELD *> listTableField, QList<QPair<int, QList<void *> > > recoders)
+bool AlpIO::writeTableData(ALP_OBJECT_ENTRY *entry, QList<ALP_TABLE_FIELD *> listTableField, QList<QPair<int, QList<void *> > > recoders)
 {
     // Always use data after opening and initialization
     if (!isInit() && !initialization()) {
@@ -711,21 +697,21 @@ bool AlpIO::writeTable(ALP_OBJECT_ENTRY *entry, QList<ALP_TABLE_FIELD *> listTab
             QPair<int, QList<void *> > pairval = recoders.at(m);
             char *tempVal = reinterpret_cast<char *>(pairval.second.at(j));
             int dataType = pairval.first;
-            if (dataType == CharData) {
+            if (dataType == AlpData::CharData) {
                 m_fileWriteStream.write((char *)tempVal, sizeof(char));
-            } else if (dataType == ShortData) {
+            } else if (dataType == AlpData::ShortData) {
                 m_fileWriteStream.write((char *)tempVal, sizeof(short));
-            } else if (dataType == LongData) {
+            } else if (dataType == AlpData::LongData) {
                 m_fileWriteStream.write((char *)tempVal, sizeof(long));
-            } else if (dataType == FloatData) {
+            } else if (dataType == AlpData::FloatData) {
                 m_fileWriteStream.write((char *)tempVal, sizeof(float));
-            } else if (dataType == DoubleData) {
+            } else if (dataType == AlpData::DoubleData) {
                 m_fileWriteStream.write((char *)tempVal, sizeof(double));
-            } else if (dataType == UnsignedCharData) {
+            } else if (dataType == AlpData::UnsignedCharData) {
                 m_fileWriteStream.write((char *)tempVal, sizeof(unsigned char));
-            } else if (dataType == UnsignedShortData) {
+            } else if (dataType == AlpData::UnsignedShortData) {
                 m_fileWriteStream.write((char *)tempVal, sizeof(unsigned short));
-            } else if (dataType == UnsignedLongData) {
+            } else if (dataType == AlpData::UnsignedLongData) {
                 m_fileWriteStream.write((char *)tempVal, sizeof(unsigned long));
             } else {
                 qDebug()<<"error!!!!";
@@ -745,7 +731,7 @@ bool AlpIO::writeTable(ALP_OBJECT_ENTRY *entry, QList<ALP_TABLE_FIELD *> listTab
     return true;
 }
 
-bool AlpIO::writeStream(ALP_OBJECT_ENTRY *entry, const char *buf)
+bool AlpIO::writeStreamData(ALP_OBJECT_ENTRY *entry, const char *buf, int len)
 {
     // Always use data after opening and initialization
     if (!isInit() && !initialization()) {
@@ -766,7 +752,7 @@ bool AlpIO::writeStream(ALP_OBJECT_ENTRY *entry, const char *buf)
 
     int datalen = 0;
     ALP_STREAM *stream = new ALP_STREAM;
-    stream->Length = strlen(buf);
+    stream->Length = len;
     m_fileWriteStream.write((char *)stream, sizeof(ALP_STREAM));
     datalen += sizeof(ALP_STREAM);
 
@@ -786,22 +772,92 @@ bool AlpIO::writeStream(ALP_OBJECT_ENTRY *entry, const char *buf)
 
 bool AlpIO::updateName(int seq, QString name)
 {
+    if (name.length() > 15) {
+        return false;
+    }
+    // Always use data after opening and initialization
+    if (!isInit() && !initialization()) {
+        return false;
+    }
 
+    // Locate the object
+    for (int i = 0; i < m_allList->count(); i++) {
+        ALP_OBJECT_ENTRY *entry = m_allList->at(i);
+
+        if (entry->Position == seq) {
+            strcpy(entry->Name, name.toLocal8Bit().data());
+            updateEntry(entry);
+            return true;
+        }
+    }
+
+    return false;
 }
 
-ALP_OBJECT_ENTRY *AlpIO::entry(QString name, FileIO::ObjectAttribute attr, FileIO::ObjectType subattr)
+bool AlpIO::updateAliasName(int seq, QString aName)
 {
 
 }
 
-ALP_CHANNEL *AlpIO::channel(QString unit, QString aName, QString aUnit, QList<ALP_CHANNEL_DIMENSION> dim)
+bool AlpIO::deleteObject(int seq)
 {
+    // Always use data after opening and initialization
+    if (!isInit() && !initialization()) {
+        return false;
+    }
 
+    // Locate the object
+    for (int i = 0; i < m_allList->count(); i++) {
+        ALP_OBJECT_ENTRY *entry = m_allList->at(i);
+
+        if (entry->Position == seq) {
+            entry->Status = 2;
+            updateEntry(entry);
+            return true;
+        }
+    }
 }
 
-ALP_CHANNEL_DIMENSION *AlpIO::channelDim(QString name, QString unit, QString aName, float delta, int MaxSample)
+bool AlpIO::dicardObject(int seq)
 {
+    // Always use data after opening and initialization
+    if (!isInit() && !initialization()) {
+        return false;
+    }
 
+    // Locate the object
+    for (int i = 0; i < m_allList->count(); i++) {
+        ALP_OBJECT_ENTRY *entry = m_allList->at(i);
+
+        if (entry->Position == seq) {
+            entry->Status = 1;
+            updateEntry(entry);
+            return true;
+        }
+    }
+}
+
+bool AlpIO::recoverObject(int seq)
+{
+    // Always use data after opening and initialization
+    if (!isInit() && !initialization()) {
+        return false;
+    }
+
+    // Locate the object
+    for (int i = 0; i < m_allList->count(); i++) {
+        ALP_OBJECT_ENTRY *entry = m_allList->at(i);
+
+        if (entry->Position == seq) {
+            if (entry->Status != 1) {
+                entry->Status = 0;
+                updateEntry(entry);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }
 
 //======================================= Section: Private methods ===========================================
@@ -1005,7 +1061,7 @@ void *AlpIO::streamMeta(ALP_OBJECT_ENTRY *entry)
     ALP_STREAM *meta = new ALP_STREAM;
 
     m_fileStream.seekg(entry->Position, std::ios_base::beg);
-    m_fileStream.read(reinterpret_cast<char *>(meta), sizeof(ALP_TABLE));
+    m_fileStream.read(reinterpret_cast<char *>(meta), sizeof(ALP_STREAM));
 
     return meta;
 
@@ -1034,7 +1090,7 @@ void *AlpIO::curveData(ALP_OBJECT_ENTRY *entry)
     //m_fileStream.seekg(entry->Position + 2 * sizeof(ALP_HEAD) + 464, std::ios_base::beg);
 //    m_fileStream.seekg(entry->Position + sizeof, std::ios_base::beg);
 
-    return data(meta, meta->RepCode, CurveObject);
+    return data(meta, meta->RepCode, AlpData::CurveObject);
 }
 
 /**
@@ -1059,7 +1115,7 @@ void *AlpIO::waveData(ALP_OBJECT_ENTRY *entry)
     // Update read position
 //    m_fileStream.seekg((entry->Position / (m_head->BlockLen))*(m_head->BlockLen) + (m_head->BlockLen), std::ios_base::beg);
 //    m_fileStream.seekg(entry->Position, std::ios_base::beg);
-    return data(meta, meta->RepCode, WaveObject);
+    return data(meta, meta->RepCode, AlpData::WaveObject);
 }
 
 /**
@@ -1091,7 +1147,7 @@ void *AlpIO::fmtData(ALP_OBJECT_ENTRY *entry)
 //    m_fileStream.read(reinterpret_cast<char*>(&timeNum), sizeof(int));
 //    m_fileStream.read(reinterpret_cast<char*>(&value), sizeof(float));
 
-    return data(meta, meta->RepCode, FMTObject);
+    return data(meta, meta->RepCode, AlpData::FMTObject);
 }
 
 /**
@@ -1151,21 +1207,21 @@ void *AlpIO::tableData(ALP_OBJECT_ENTRY *entry)
         {
             ALP_TABLE_FIELD *field = m_alpTableField->at(j);
 
-            if(field->RepCode == UnsignedCharData) {
+            if(field->RepCode == AlpData::UnsignedCharData) {
                 char *data = new char[field->Length];
                 m_fileStream.read(reinterpret_cast<char*>(data), field->Length*sizeof(char));
                 record->setProperty(field->Name, QString(data));
             }
-            if(field->RepCode == LongData
-                    || field->RepCode == UnsignedLongData
-                    || field->RepCode == ShortData
-                    || field->RepCode == UnsignedShortData
-                    || field->RepCode == CharData) {
+            if(field->RepCode == AlpData::LongData
+                    || field->RepCode == AlpData::UnsignedLongData
+                    || field->RepCode == AlpData::ShortData
+                    || field->RepCode == AlpData::UnsignedShortData
+                    || field->RepCode == AlpData::CharData) {
                 int *data = new int;
                 m_fileStream.read(reinterpret_cast<char*>(data), sizeof(int));
                 record->setProperty(field->Name,*data);
             }
-            if(field->RepCode == FloatData || field->RepCode == DoubleData) {
+            if(field->RepCode == AlpData::FloatData || field->RepCode == AlpData::DoubleData) {
                 float *data = new float;
                 m_fileStream.read(reinterpret_cast<char*>(data), sizeof(float));
                 record->setProperty(field->Name,*data);
@@ -1212,21 +1268,21 @@ void *AlpIO::tableData(QString name)
         {
             ALP_TABLE_FIELD *field = m_alpTableField->at(j);
 
-            if(field->RepCode == UnsignedCharData) {
+            if(field->RepCode == AlpData::UnsignedCharData) {
                 char *data = new char[field->Length];
                 m_fileStream.read(reinterpret_cast<char*>(data), field->Length*sizeof(char));
                 record->setProperty(field->Name, QString(data));
             }
-            if(field->RepCode == LongData
-                    || field->RepCode == UnsignedLongData
-                    || field->RepCode == ShortData
-                    || field->RepCode == UnsignedShortData
-                    || field->RepCode == CharData) {
+            if(field->RepCode == AlpData::LongData
+                    || field->RepCode == AlpData::UnsignedLongData
+                    || field->RepCode == AlpData::ShortData
+                    || field->RepCode == AlpData::UnsignedShortData
+                    || field->RepCode == AlpData::CharData) {
                 int *data = new int;
                 m_fileStream.read(reinterpret_cast<char*>(data), sizeof(int));
                 record->setProperty(field->Name,*data);
             }
-            if(field->RepCode == FloatData || field->RepCode == DoubleData) {
+            if(field->RepCode == AlpData::FloatData || field->RepCode == AlpData::DoubleData) {
                 float *data = new float;
                 m_fileStream.read(reinterpret_cast<char*>(data), sizeof(float));
                 record->setProperty(field->Name,*data);
@@ -1324,21 +1380,21 @@ void AlpIO::updateEntry(ALP_OBJECT_ENTRY *entry)
 void *AlpIO::data(void *meta, int datatype, int objectType)
 {
     switch (datatype) {
-    case CharData:
+    case AlpData::CharData:
         return dataChar(meta, objectType);
-    case ShortData:
+    case AlpData::ShortData:
         return dataShort(meta, objectType);
-    case LongData:
+    case AlpData::LongData:
         return dataLong(meta, objectType);
-    case FloatData:
+    case AlpData::FloatData:
         return dataFloat(meta, objectType);
-    case DoubleData:
+    case AlpData::DoubleData:
         return dataDouble(meta, objectType);
-    case UnsignedCharData:
+    case AlpData::UnsignedCharData:
         return dataUnsignedChar(meta, objectType);
-    case UnsignedShortData:
+    case AlpData::UnsignedShortData:
         return dataUnsignedShort(meta, objectType);
-    case UnsignedLongData:
+    case AlpData::UnsignedLongData:
         return dataUnsignedLong(meta, objectType);
     default:
         return NULL;
@@ -1354,7 +1410,7 @@ void *AlpIO::dataChar(void *info, int type)
     float depth,time;
 
     switch (type) {
-    case CurveObject: {
+    case AlpData::CurveObject: {
         curveInfo = static_cast<ALP_CURVE*>(info);
         depth = curveInfo->StartDepth;
         time = -1;
@@ -1377,7 +1433,7 @@ void *AlpIO::dataChar(void *info, int type)
 
         return dataChar;
     }
-    case WaveObject: {
+    case AlpData::WaveObject: {
         waveInfo = static_cast<ALP_WAVE*>(info);
         depth = waveInfo->StartDepth;
         time = waveInfo->StartTime;
@@ -1406,7 +1462,7 @@ void *AlpIO::dataChar(void *info, int type)
 
         return dataChar;
     }
-    case FMTObject: {
+    case AlpData::FMTObject: {
         fmtInfo = static_cast<ALP_FMT*>(info);
         time = fmtInfo->StartTime;
 
@@ -1450,7 +1506,7 @@ void *AlpIO::dataShort(void *info, int type)
     float depth,time;
 
     switch (type) {
-    case CurveObject: {
+    case AlpData::CurveObject: {
         curveInfo = static_cast<ALP_CURVE*>(info);
         depth = curveInfo->StartDepth;
         time = -1;
@@ -1472,7 +1528,7 @@ void *AlpIO::dataShort(void *info, int type)
         }
         return dataShort;
     }
-    case WaveObject: {
+    case AlpData::WaveObject: {
         waveInfo = static_cast<ALP_WAVE*>(info);
         depth = waveInfo->StartDepth;
         time = waveInfo->StartTime;
@@ -1500,7 +1556,7 @@ void *AlpIO::dataShort(void *info, int type)
         }
         return dataShort;
     }
-    case FMTObject: {
+    case AlpData::FMTObject: {
         fmtInfo = static_cast<ALP_FMT*>(info);
         time = fmtInfo->StartTime;
 
@@ -1544,7 +1600,7 @@ void *AlpIO::dataLong(void *info, int type)
     float depth,time;
 
     switch (type) {
-    case CurveObject: {
+    case AlpData::CurveObject: {
         curveInfo = static_cast<ALP_CURVE*>(info);
         depth = curveInfo->StartDepth;
         time = -1;
@@ -1567,7 +1623,7 @@ void *AlpIO::dataLong(void *info, int type)
 
         return dataLong;
     }
-    case WaveObject: {
+    case AlpData::WaveObject: {
         waveInfo = static_cast<ALP_WAVE*>(info);
         depth = waveInfo->StartDepth;
         time = waveInfo->StartTime;
@@ -1596,7 +1652,7 @@ void *AlpIO::dataLong(void *info, int type)
 
         return dataLong;
     }
-    case FMTObject: {
+    case AlpData::FMTObject: {
         fmtInfo = static_cast<ALP_FMT*>(info);
         time = fmtInfo->StartTime;
 
@@ -1641,7 +1697,7 @@ void *AlpIO::dataFloat(void *info, int type)
     float depth,time;
 
     switch (type) {
-    case CurveObject: {
+    case AlpData::CurveObject: {
         curveInfo = static_cast<ALP_CURVE*>(info);
         depth = curveInfo->StartDepth;
         time = -1;
@@ -1667,7 +1723,7 @@ void *AlpIO::dataFloat(void *info, int type)
 
         return dataFloat;
     }
-    case WaveObject: {
+    case AlpData::WaveObject: {
         waveInfo = static_cast<ALP_WAVE*>(info);
         depth = waveInfo->StartDepth;
         time = waveInfo->StartTime;
@@ -1698,7 +1754,7 @@ void *AlpIO::dataFloat(void *info, int type)
 
         return dataFloat;
     }
-    case FMTObject: {
+    case AlpData::FMTObject: {
         fmtInfo = static_cast<ALP_FMT*>(info);
         time = fmtInfo->StartTime;
 
@@ -1729,7 +1785,7 @@ void *AlpIO::dataFloat(void *info, int type)
 
         return dataFloat;
     }
-    case TDTObject:
+    case AlpData::TDTObject:
         return NULL;
     default:
         return NULL;
@@ -1745,7 +1801,7 @@ void *AlpIO::dataDouble(void *info, int type)
     float depth,time;
 
     switch (type) {
-    case CurveObject: {
+    case AlpData::CurveObject: {
         curveInfo = static_cast<ALP_CURVE*>(info);
         depth = curveInfo->StartDepth;
         time = -1;
@@ -1767,7 +1823,7 @@ void *AlpIO::dataDouble(void *info, int type)
 
         return dataDouble;
     }
-    case WaveObject: {
+    case AlpData::WaveObject: {
         waveInfo = static_cast<ALP_WAVE*>(info);
         depth = waveInfo->StartDepth;
         time = waveInfo->StartTime;
@@ -1796,7 +1852,7 @@ void *AlpIO::dataDouble(void *info, int type)
 
         return dataDouble;
     }
-    case FMTObject: {
+    case AlpData::FMTObject: {
         fmtInfo = static_cast<ALP_FMT*>(info);
         time = fmtInfo->StartTime;
 
@@ -1840,7 +1896,7 @@ void *AlpIO::dataUnsignedChar(void *info, int type)
     float depth,time;
 
     switch (type) {
-    case CurveObject: {
+    case AlpData::CurveObject: {
         curveInfo = static_cast<ALP_CURVE*>(info);
         depth = curveInfo->StartDepth;
         time = -1;
@@ -1862,7 +1918,7 @@ void *AlpIO::dataUnsignedChar(void *info, int type)
 
         return dataUChar;
     }
-    case WaveObject: {
+    case AlpData::WaveObject: {
         waveInfo = static_cast<ALP_WAVE*>(info);
         depth = waveInfo->StartDepth;
         time = waveInfo->StartTime;
@@ -1891,7 +1947,7 @@ void *AlpIO::dataUnsignedChar(void *info, int type)
 
         return dataUChar;
     }
-    case FMTObject: {
+    case AlpData::FMTObject: {
         fmtInfo = static_cast<ALP_FMT*>(info);
         time = fmtInfo->StartTime;
 
@@ -1936,7 +1992,7 @@ void *AlpIO::dataUnsignedShort(void *info, int type)
     float depth,time;
 
     switch (type) {
-    case CurveObject: {
+    case AlpData::CurveObject: {
         curveInfo = static_cast<ALP_CURVE*>(info);
         depth = curveInfo->StartDepth;
         time = -1;
@@ -1958,7 +2014,7 @@ void *AlpIO::dataUnsignedShort(void *info, int type)
 
         return dataUShort;
     }
-    case WaveObject: {
+    case AlpData::WaveObject: {
         waveInfo = static_cast<ALP_WAVE*>(info);
         depth = waveInfo->StartDepth;
         time = waveInfo->StartTime;
@@ -1987,7 +2043,7 @@ void *AlpIO::dataUnsignedShort(void *info, int type)
 
         return dataUShort;
     }
-    case FMTObject: {
+    case AlpData::FMTObject: {
         fmtInfo = static_cast<ALP_FMT*>(info);
         time = fmtInfo->StartTime;
 
@@ -2032,7 +2088,7 @@ void *AlpIO::dataUnsignedLong(void *info, int type)
     float depth,time;
 
     switch (type) {
-    case CurveObject: {
+    case AlpData::CurveObject: {
         curveInfo = static_cast<ALP_CURVE*>(info);
         depth = curveInfo->StartDepth;
         time = -1;
@@ -2054,7 +2110,7 @@ void *AlpIO::dataUnsignedLong(void *info, int type)
 
         return dataULong;
     }
-    case WaveObject: {
+    case AlpData::WaveObject: {
         waveInfo = static_cast<ALP_WAVE*>(info);
         depth = waveInfo->StartDepth;
         time = waveInfo->StartTime;
@@ -2083,7 +2139,7 @@ void *AlpIO::dataUnsignedLong(void *info, int type)
 
         return dataULong;
     }
-    case FMTObject: {
+    case AlpData::FMTObject: {
         fmtInfo = static_cast<ALP_FMT*>(info);
         time = fmtInfo->StartTime;
 

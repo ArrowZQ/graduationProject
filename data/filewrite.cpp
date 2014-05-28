@@ -1,5 +1,9 @@
 #include "filewrite.h"
 
+FileWrite::FileWrite() : m_fileIO(NULL)
+{
+}
+
 bool FileWrite::open(const QString &fileName)
 {
     // File checking
@@ -42,6 +46,30 @@ bool FileWrite::open(const QString &fileName)
     return m_isOpen;
 }
 
+bool FileWrite::writeChannelData(ALP_OBJECT_ENTRY *entry, ALP_CHANNEL *channel, Data<float, float, float> *data)
+{
+    if (!m_isOpen) {
+        return false;
+    }
+    return m_fileIO->writeChannelData(entry,channel,data);
+}
+
+bool FileWrite::writeStreamData(ALP_OBJECT_ENTRY *entry, const char *buf, int len)
+{
+    if (!m_isOpen) {
+        return false;
+    }
+    return m_fileIO->writeStreamData(entry,buf, len);
+}
+
+bool FileWrite::updateName(int seq, QString name)
+{
+    if (!m_isOpen) {
+        return false;
+    }
+    return m_fileIO->updateName(seq,name);
+}
+
 FileIO *FileWrite::fileIO() const
 {
     return m_fileIO;
@@ -54,5 +82,31 @@ void FileWrite::setFileIO(FileIO *fileIO)
 
 int FileWrite::fileType(const QString &fileName)
 {
+    QFileInfo fileInfo(fileName);
+    QString surfix = "." + fileInfo.suffix().toLower();
 
+    if (surfix == ".axp") {
+        return FileIO::AXPFile;
+    }
+    else if (surfix == ".alp") {
+        return FileIO::ALPFile;
+    }
+    else {
+        return FileIO::NoneFile;
+    }
+}
+
+QString FileWrite::createNewFile(QString fileName, QString path, FileIO::FileType type)
+{
+    if (type == FileIO::ALPFile) {
+        AlpIO *alp;
+        alp = new AlpIO();
+        QString filepath = path + "/" + fileName + ".ALP";
+        if (alp->createNewAlpFile(filepath)) {
+//            delete alp;
+            return filepath;
+        } else {
+            return "";
+        }
+    }
 }

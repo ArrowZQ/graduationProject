@@ -198,7 +198,7 @@ QPolygonF FileReader::curveData(int seq)
     int type = m_fileIO->type(seq);
 
     // Check object type
-    if (type != FileIO::CurveObject || !m_isOpen) {
+    if (type != AlpData::CurveObject || !m_isOpen) {
         return data;
     }
 
@@ -251,7 +251,7 @@ QPolygonF FileReader::arrayData(int seq, int &count, int index)
     int type = m_fileIO->type(seq);
 
     // Check object type
-    if (type != FileIO::WaveObject || !m_isOpen) {
+    if (type != AlpData::WaveObject || !m_isOpen) {
         return data;
     }
 
@@ -323,7 +323,7 @@ QList<QPair<float, QList<float> > > FileReader::waveData(int seq)
     int type = m_fileIO->type(seq);
 
     // Check object type
-    if (type != FileIO::WaveObject || !m_isOpen) {
+    if (type != AlpData::WaveObject || !m_isOpen) {
         return data;
     }
 
@@ -423,19 +423,19 @@ int FileReader::objectSequence(const QString &name)
  */
 int FileReader::objectType(int attribute, int subattribute)
 {
-    if (attribute == AlpIO::ChannelAttribure) {
-        if (subattribute >= AlpIO::CurveObject && subattribute <= AlpIO::NoneObject) {
+    if (attribute == AlpData::ChannelAttribure) {
+        if (subattribute >= AlpData::CurveObject && subattribute <= AlpData::NoneObject) {
             return subattribute;
         }
     }
-    else if (attribute == AlpIO::TableAttribure) {
-        return AlpIO::TableObject;
+    else if (attribute == AlpData::TableAttribure) {
+        return AlpData::TableObject;
     }
-    else if (attribute == AlpIO::StreamAttribure) {
-        return AlpIO::StreamObject;
+    else if (attribute == AlpData::StreamAttribure) {
+        return AlpData::StreamObject;
     }
 
-    return AlpIO::NoneObject;
+    return AlpData::NoneObject;
 }
 
 /**
